@@ -21,15 +21,16 @@ int main(int argc, char *argv[])
     char buf[MAX_LINE];
     int s;
     int len;
-    if (argc == 2)
-    {
-        host = argv[1];
-    }
-    else
-    {
-        fprintf(stderr, " usage : simplex - talk host \n");
-        exit(1);
-    }
+    // if (argc == 2)
+    // {
+    //     host = argv[1];
+    // }
+    // else
+    // {
+    //     fprintf(stderr, " usage : simplex - talk host \n");
+    //     exit(1);
+    // }
+    host =  "172.30.172.177";
     hp = gethostbyname(host);
     if (!hp)
     {
@@ -55,10 +56,18 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    while (fgets(buf, sizeof(buf), stdin))
+    while (1)
     {
-        buf[MAX_LINE - 1] = '\0';
-        len = strlen(buf) + 1;
-        send(s, buf, len, 0);
+        if (fgets(buf, sizeof(buf), stdin)){
+            buf[MAX_LINE - 1] = '\0';
+            len = strlen(buf) + 1;
+            send(s, buf, len, 0);
+        }
+        if ((len = recv(s, buf, sizeof(buf), 0)) != 0){
+            printf(" recebido: ");
+            fputs(buf, stdout);
+            printf("\n");
+        }
     }
+    
 }
